@@ -1,0 +1,17 @@
+{
+  "rules": {
+    "prefer-arrow-callback": 0, // Important for Mocha to work as expected
+    "func-names": 0, // no need to name every test function
+    "no-tabs": 0, // Not really needed in test code. +some response mocks include tabs
+
+    "import/no-extraneous-dependencies": [2, {"devDependencies": true}] // Where they are most needed
+  },
+  "globals": {
+    "after": false,
+    "afterEach": false,
+    "before": false,
+    "beforeEach": false,
+    "describe": false,
+    "it": false
+  }
+}

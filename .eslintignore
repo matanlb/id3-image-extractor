@@ -1,0 +1,4 @@
+.eslintrc
+dist/**
+coverage/**
+node_modules/**

@@ -1,0 +1,60 @@
+{
+  "parser"  : "babel-eslint",
+  "plugins": [
+    "import"
+  ],
+  "extends" : ["airbnb"],
+  "rules": {
+    // Softten some rules.
+    "max-len": [2, 120, 2, {
+      "ignoreTrailingComments": true,
+      "ignoreStrings": false,
+      "ignoreTemplateLiterals": false,
+      "ignoreRegExpLiterals": false
+    }],
+    "comma-dangle": [2, "always-multiline"], // better for version source control reviews.
+    "default-case": 0, // Required default case is nonsense.
+    "new-cap": [2, {"capIsNew": false, "newIsCap": true}], // For Record() etc.
+    "no-param-reassign": 0, // We love param reassignment. useful for optional params.
+    "no-shadow": 0, // Shadowing is a nice language feature, it's still JS.
+    "no-console": 2, // Use the log!
+    "prefer-const": [2, {"destructuring": "all"}],
+    "no-plusplus": 0, // This is plain silly
+    "no-restricted-syntax": [2, "ForInStatement", "LabeledStatement", "WithStatement"], // We like for-of
+    "class-methods-use-this": 0, // static stuff are evil! EVIL!!!
+    "no-underscore-dangle": 0, // Used to indicate private stuff
+    "arrow-parens": [2, "as-needed"], // allow no-parans when only one argument
+
+    // eslint-plugin-import
+    "import/no-unresolved": [2, {"commonjs": true}],
+    "import/named": 2,
+    "import/default": 2,
+    "import/namespace": 2,
+    "import/export": 2,
+    "import/order": [2, {"groups": ["builtin", "external", ["internal", "parent", "sibling", "index"]]}],
+    "import/extensions": 0, // This is purlly cosmetic
+    "import/no-extraneous-dependencies": [2, {"devDependencies": false}], // disallow usage of devDependencies in source code
+
+    // Overide Stateless
+    "react/prefer-stateless-function": 0,
+    "react/prefer-es6-class": 0,
+    "react/prop-types": [2, {"ignore": ["dispatch", "children"]}]
+  },
+  "globals": {
+    "require": false
+  },
+  "settings": {
+    "import/ignore": [
+      "node_modules",
+      "\\.json$"
+    ],
+    "import/parser": "babel-eslint",
+    "import/resolve": {
+      "extensions": [
+        ".js",
+        ".jsx",
+        ".json"
+      ]
+    }
+  }
+}

@@ -1,0 +1,25 @@
+machine:
+  node:
+    version: 6.9.0
+
+dependencies:
+  override:
+    - yarn
+    - yarn --ignore-engines
+  cache_directories:
+    - ~/.cache/yarn
+
+test:
+  override:
+    - yarn run build-ci
+  post:
+    - if [ -d "coverage" ]; then cp -r ./coverage $CIRCLE_TEST_REPORTS; fi
+    - mkdir -p $CIRCLE_TEST_REPORTS/junit
+    - if [ -e "test-results.xml" ]; then cp test-results.xml $CIRCLE_TEST_REPORTS/junit/test-results.xml; fi
+    - if [ -e "lint-results.xml" ]; then cp lint-results.xml $CIRCLE_TEST_REPORTS/junit/lint-results.xml; fi
+
+deployment:
+  development:
+    branch: [master]
+    commands:
+      - ./deploy.sh
