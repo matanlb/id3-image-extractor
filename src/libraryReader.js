@@ -13,17 +13,23 @@ function readNoHidden(path) {
 
 export default function readLibrary(path, allowdExtentions) {
   return readNoHidden(path) // Read all artiest
-    .map(bandName => Promise.props({ // Read albums to artiest starct
-      name: bandName,
-      path: `${path}/${bandName}`,
-      __albums: readNoHidden(`${path}/${bandName}`),
+    .map(artistName => Promise.props({ // Read albums to artiest starct
+      name: artistName,
+      path: `${path}/${artistName}`,
+      __albums: readNoHidden(`${path}/${artistName}`),
     }))
-    .map(band => Promise.props(_.assign(band, { // Read all songs into alubms in artiest
-      albums: Promise.map(band.__albums, albumName => readNoHidden(`${band.path}/${albumName}`)
+    .map(artist => Promise.props(_.assign(artist, { // Read all songs into alubms in artiest
+      albums: Promise.map(artist.__albums, albumName => readNoHidden(`${artist.path}/${albumName}`)
         .then(songs => ({
           name: albumName,
-          path: `${band.path}/${albumName}`,
+          path: `${artist.path}/${albumName}`,
           songs: _.filter(songs, name => _.indexOf(allowdExtentions, getExtention(name)) !== -1),
         }))),
-    })));
+    })))
+    .map(artist => {
+      const albums = {};
+      _.forEach(artist.albums, album => { albums[album.name] = album; });
+      artist.albums = albums;
+      return artist;
+    });
 }

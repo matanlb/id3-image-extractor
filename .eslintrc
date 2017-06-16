@@ -5,6 +5,9 @@
   ],
   "extends" : ["airbnb"],
   "rules": {
+    // Pet project :)
+    "no-console": 0,
+    
     // Softten some rules.
     "max-len": [2, 120, 2, {
       "ignoreTrailingComments": true,
@@ -17,7 +20,6 @@
     "new-cap": [2, {"capIsNew": false, "newIsCap": true}], // For Record() etc.
     "no-param-reassign": 0, // We love param reassignment. useful for optional params.
     "no-shadow": 0, // Shadowing is a nice language feature, it's still JS.
-    "no-console": 2, // Use the log!
     "prefer-const": [2, {"destructuring": "all"}],
     "no-plusplus": 0, // This is plain silly
     "no-restricted-syntax": [2, "ForInStatement", "LabeledStatement", "WithStatement"], // We like for-of
