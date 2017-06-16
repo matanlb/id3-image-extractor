@@ -2,6 +2,8 @@ import FileSystem from 'fs';
 import _ from 'lodash';
 import Promise from 'bluebird';
 
+import { getExtention } from './util';
+
 const readdir = Promise.promisify(FileSystem.readdir);
 
 function readNoHidden(path) {
@@ -9,7 +11,7 @@ function readNoHidden(path) {
     .then(content => _.filter(content, name => _.head(name) !== '.'));
 }
 
-export default function ReadLibrary(path) {
+export default function readLibrary(path, allowdExtentions) {
   return readNoHidden(path) // Read all artiest
     .map(bandName => Promise.props({ // Read albums to artiest starct
       name: bandName,
@@ -21,7 +23,7 @@ export default function ReadLibrary(path) {
         .then(songs => ({
           name: albumName,
           path: `${band.path}/${albumName}`,
-          songs,
+          songs: _.filter(songs, name => _.indexOf(allowdExtentions, getExtention(name)) !== -1),
         }))),
     })));
 }
