@@ -25,7 +25,10 @@
   },
   "homepage": "https://github.com/matanlb/id3-image-extractor#readme",
   "dependencies": {
-    "lodash": "^4.17.4"
+    "bluebird": "^3.5.0",
+    "lodash": "^4.17.4",
+    "minimist": "^1.2.0",
+    "node-id3": "^0.0.9"
   },
   "devDependencies": {
     "babel-core": "^6.23.1",
