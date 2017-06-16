@@ -19,13 +19,13 @@ readLibrary(rootPath, KNOWN_EXTENTIONS)
   .map(artist => Promise.props(_.assign(artist, {
     albums: Promise.map(artist.albums, album => Promise.map(album.songs, song => Promise.props(({
       name: song,
-      metadata:  id3Handler.readId3Tags(`${album.path}/${song}`)
+      metadata: id3Handler.readId3Tags(`${album.path}/${song}`)
         .tap(() => progressBar.tick()),
     })))
     .then(songs => {
       album.songs = songs;
       return album;
-    }))
+    })),
   })), { concurrency: 25 })
   .catch(e => {
     console.log('!!!!!!!!!!!!!!!!!!!!!!!!');

@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import ProgressBar from 'progress'
+import ProgressBar from 'progress';
 
 export function getExtention(fileName) {
   return _.last(fileName.split('.'));
@@ -15,7 +15,7 @@ export function listSongs(library) {
 }
 
 export function newProgressBar(total, message) {
-  let progressBar = new ProgressBar(`${message} :bar :current/:total`, {
+  const progressBar = new ProgressBar(`${message} :bar :current/:total`, {
     total,
     width: 100,
     curr: -1,
