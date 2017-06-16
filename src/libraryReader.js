@@ -16,20 +16,14 @@ export default function readLibrary(path, allowdExtentions) {
     .map(artistName => Promise.props({ // Read albums to artiest starct
       name: artistName,
       path: `${path}/${artistName}`,
-      __albums: readNoHidden(`${path}/${artistName}`),
+      albums: readNoHidden(`${path}/${artistName}`),
     }))
     .map(artist => Promise.props(_.assign(artist, { // Read all songs into alubms in artiest
-      albums: Promise.map(artist.__albums, albumName => readNoHidden(`${artist.path}/${albumName}`)
+      albums: Promise.map(artist.albums, albumName => readNoHidden(`${artist.path}/${albumName}`)
         .then(songs => ({
           name: albumName,
           path: `${artist.path}/${albumName}`,
           songs: _.filter(songs, name => _.indexOf(allowdExtentions, getExtention(name)) !== -1),
         }))),
-    })))
-    .map(artist => {
-      const albums = {};
-      _.forEach(artist.albums, album => { albums[album.name] = album; });
-      artist.albums = albums;
-      return artist;
-    });
+    })));
 }

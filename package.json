@@ -28,7 +28,8 @@
     "bluebird": "^3.5.0",
     "jsmediatags": "^3.5.0",
     "lodash": "^4.17.4",
-    "minimist": "^1.2.0"
+    "minimist": "^1.2.0",
+    "progress": "^2.0.0"
   },
   "devDependencies": {
     "babel-core": "^6.23.1",
