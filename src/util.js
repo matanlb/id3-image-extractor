@@ -14,7 +14,7 @@ export function listSongs(library) {
     .value();
 }
 
-export function newProgressBar(total, message) {
+export function newProgressBar(total, message, init = false) {
   const progressBar = new ProgressBar(`${message} :bar :current/:total`, {
     total,
     width: 100,
@@ -22,7 +22,7 @@ export function newProgressBar(total, message) {
     incomplete: '░',
     complete: '█',
   });
-  progressBar.tick();
+  if (init) progressBar.tick();
 
   return progressBar;
 }
