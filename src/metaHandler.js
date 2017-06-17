@@ -1,5 +1,6 @@
 import jsmediatags from 'jsmediatags';
 import Promise from 'bluebird';
+import _ from 'lodash';
 
 export function readId3Tags(path) {
   return new Promise((resolve, reject) =>
@@ -8,6 +9,12 @@ export function readId3Tags(path) {
       onError: reject,
     })
   );
+}
+
+export function loadSongMetadata(song) {
+  return readId3Tags(song.path)
+    .then(metadata => _.assign(song, { metadata }))
+    .return(song);
 }
 
 export function writeTags(/* path, tags */) {
