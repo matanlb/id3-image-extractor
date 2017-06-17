@@ -21,6 +21,7 @@ export function newProgressBar(total, message, init = false) {
     curr: -1,
     incomplete: '░',
     complete: '█',
+    renderThrottle: 0,
   });
   if (init) progressBar.tick();
 

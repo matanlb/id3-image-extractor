@@ -14,50 +14,39 @@ const rootPath = root || r || process.env.MUSIC_FOLDER;
 
 let loadingBar;
 let writingBar;
+const library = {};
+// Load music library
 readLibrary(rootPath, KNOWN_EXTENTIONS)
-  .tap(library => {
-    let totalAlbums = 0;
-    const totalSongs = _.chain(library)
-      .map(artist => artist.albums)
-      .flatten()
-      .tap(albums => { totalAlbums = albums.length; })
-      .map(album => album.songs)
-      .flatten()
-      .value()
-      .length;
-    loadingBar = newProgressBar(totalSongs, 'Readign metadata:', true);
-    writingBar = newProgressBar(totalAlbums, 'Creaeting images:', false);
-  })
-  .map(artist => Promise.props(_.assign(artist, {
-    albums: Promise.map(artist.albums, album => Promise.map(album.songs, song => Promise.props(({
-      name: song,
-      metadata: id3Handler.readId3Tags(`${album.path}/${song}`)
-        .tap(() => loadingBar.tick()),
-    })))
-    .then(songs => {
-      album.songs = songs;
-      return album;
-    })),
-  })), { concurrency: 25 })
-  .tap(() => writingBar.tick())
-  .each(artist => {
-    for (const album of artist.albums) {
-      const songWithImageIndex = _.findIndex(album.songs, song => !_.isEmpty(song.metadata.tags.picture));
-      if (songWithImageIndex === -1) return;
-      const song = album.songs[songWithImageIndex];
-      const imageData = song.metadata.tags.picture;
-
-      const writeStream =
-        FileSystem.createWriteStream(`${album.path}/${album.name}.${_.last(imageData.format.split('/'))}`);
-      writeStream.end(Buffer.from(imageData.data));
+  // Save result to outer var
+  .then(musiclibrary => _.assign(library, musiclibrary))
+  // init metadata loading progress bar
+  .then(() => { loadingBar = newProgressBar(library.songs.length, 'Readign metadata:', true); })
+  // Load songs metadata
+  .then(() => Promise.map(library.songs,
+    song => id3Handler.loadSongMetadata(song).tap(loadingBar.tick.bind(loadingBar)), { concurrency: 10 }))
+  // init image file creation progress bar
+  .then(() => { writingBar = newProgressBar(library.albums.length, 'Creaeting images:', true); })
+  // creating images from metadata
+  .then(() => Promise.map(library.albums, album => {
+    const songWithImageIndex = _.findIndex(album.songs, song => !_.isEmpty(_.get(song, 'metadata.tags.picture')));
+    if (songWithImageIndex === -1 || !_.isEmpty(album.coverArt)) {
       writingBar.tick();
+      return;
     }
-  })
+    const songWithImage = album.songs[songWithImageIndex];
+    const imageData = songWithImage.metadata.tags.picture;
+
+    const imagePath = `${album.path}/${album.name}.${_.last(imageData.format.split('/'))}`;
+    const writeStream = FileSystem.createWriteStream(imagePath);
+    writeStream.end(Buffer.from(imageData.data));
+    album.coverArt = imagePath;
+    writingBar.tick();
+  }))
   .then(() => console.log('COMPLETED!'))
   .catch(e => {
     console.log('');
     console.log('An error has accourd during extraction process');
     console.log('');
-    console.log(e.stack || e.message ||  e);
+    console.log(e.stack || e.message || e);
     console.log('');
   });
