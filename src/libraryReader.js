@@ -2,7 +2,7 @@ import FileSystem from 'fs';
 import _ from 'lodash';
 import Promise from 'bluebird';
 
-import { getExtention } from './util';
+import { getExtension } from './util';
 
 const readdir = Promise.promisify(FileSystem.readdir);
 
@@ -19,7 +19,7 @@ function _readFolder(path, mixin) {
 function _readAlbumContent(album, songsExtentions) {
   return _readFolder(album.path)
     // split results to music and non music files
-    .then(files => _.partition(files, file => _.indexOf(songsExtentions, getExtention(file.name)) !== -1))
+    .then(files => _.partition(files, file => _.indexOf(songsExtentions, getExtension(file.name)) !== -1))
     .then(([songs, images]) => ({
       songs: _.map(songs, song => ({
         name: song.name,

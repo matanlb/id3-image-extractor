@@ -1,3 +1,4 @@
+import FileSystem from 'fs';
 import jsmediatags from 'jsmediatags';
 import Promise from 'bluebird';
 import _ from 'lodash';
@@ -19,4 +20,9 @@ export function loadSongMetadata(song) {
 
 export function writeTags(/* path, tags */) {
   // pending
+}
+
+export function createFile(path, buffer) {
+  return FileSystem.createWriteStream(path)
+    .end(Buffer.from(buffer));
 }

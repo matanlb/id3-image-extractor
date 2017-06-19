@@ -135,7 +135,7 @@ gulp.task('build-ci', done => runSequence('lint-ci', 'test-ci', 'babel', done));
  */
 gulp.task('nodemon', ['babel'], () =>
   nodemon({
-    script: 'dist/commander.js',
+    script: 'dist/program.js',
     ext: 'js',
     ignore: ['node_modules/**/*.js', 'dist/**/*.js', 'test/**/*.js'],
     tasks: ['babel'],
