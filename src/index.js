@@ -10,7 +10,7 @@ import * as id3Handler from './metaHandler';
 const KNOWN_EXTENTIONS = ['mp3', 'm4a'];
 
 const { r, root } = minimist(process.argv.slice(2));
-const rootPath = root || r || process.env.MUSIC_FOLDER;
+const rootPath = root || r || process.env.MUSIC_LIBRARY;
 
 let loadingBar;
 let writingBar;

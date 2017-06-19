@@ -27,7 +27,7 @@ function _readAlbumContent(album, songsExtentions) {
         album,
         artist: album.artist,
       })),
-      coverArt: _.head(images).path,
+      coverArt: (_.head(images) || {}).path,
     }));
 }
 
