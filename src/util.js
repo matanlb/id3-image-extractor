@@ -1,11 +1,7 @@
 import _ from 'lodash';
 import ProgressBar from 'progress';
 
-export const KNOWN_EXTENSION = ['mp3', 'm4a'];
-
-export function getExtension(fileName) {
-  return _.last(fileName.split('.'));
-}
+export const KNOWN_EXTENSION = ['.mp3', '.m4a'];
 
 export function newProgressBar(total, message, init = false) {
   message += _.repeat(' ', 25 - message.length);
